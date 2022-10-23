@@ -16,10 +16,7 @@ def add_plus_for_positive(my_list):
     for i in range(1, len(my_list), 1):
         if my_list[i] > 0:
             my_list[i] = f'{my_list[i]:+}'
-            my_new_list.append(my_list[i])
-        else:
-            my_new_list.append(my_list[i])
-    return my_new_list
+    return my_list
 def get_polynomial_zero_exclude(my_list1, my_list2, my_list3):
     polynomial = []
     length = len(my_list1)
@@ -31,27 +28,26 @@ def get_polynomial_zero_exclude(my_list1, my_list2, my_list3):
             next(my_list3)
             next(my_list1)
             next(my_list2)
+        elif i == 1 and k != 0:
+            polynomial += [j, k]
         else:
             polynomial += [i, j, k]
     return polynomial
 k = check_for_input_error()
-degree_list = list(range(0, k + 1))
+degree_list = list(range(0, k))
 degree_list.reverse()
 x_list = list('x^' for i in range(len(degree_list)))
 from random import randint
 numbers = [randint(-100, 101) for i in range(len(degree_list))]
 numbers_list = add_plus_for_positive(numbers)
 polynomial = get_polynomial_zero_exclude(numbers_list, x_list, degree_list)
-polynomial.append('=0')
 polynomial = str(polynomial)
 chars_to_delete = [",", "[", "]", " ", "'", "x^0"]
 for character in chars_to_delete:
     polynomial = polynomial.replace(character, '')
-if '^1-' in polynomial:
-    polynomial = polynomial.replace("^1-", '-')
-if '^1+' in polynomial:
-    polynomial = polynomial.replace("^1+", '+')
-print(f'Полученный многочлен: {polynomial}')
+    polynomial = polynomial.replace("^1-", '-').replace("^1+", '+')
+polynomial = polynomial.replace("+1x", '+x').replace("-1x", '-x')
+print(f'Полученный многочлен: {polynomial}=0')
 my_file = open("Polynomial.txt", "w")
 my_file.write(polynomial)
 my_file.close()
